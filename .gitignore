@@ -4,7 +4,7 @@ frontend/dist
 frontend/node_modules
 build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
-
+frontend/bindings
 
 # Binaries for programs and plugins
 *.exe
