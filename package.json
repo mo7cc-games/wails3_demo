@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "wails3_demo",
+  "private": true,
+  "version": "0.0.1",
+  "description": "wails3 demo",  
+  "license": "MIT",
+  "author": "墨七",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "git-sync": "ts-node script/git_sync.ts",
+    "clear-dir": "ts-node script/clear_dir.ts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@types/node": "^24.10.0",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.6.0",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.5.1",
+    "globals": "^16.5.0",
+    "jiti": "^2.6.1",
+    "prettier": "^3.6.2",
+    "shelljs": "^0.10.0",
+    "ts-node": "^10.9.2",
+    "fs-extra": "^11.3.2"
+  }
+}
