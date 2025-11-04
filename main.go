@@ -45,7 +45,7 @@ func main() {
 	// 'Mac' options tailor the window when running on macOS.
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
-	app.Window.NewWithOptions(application.WebviewWindowOptions{
+	window1 := app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title: "Window 1",
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
@@ -55,6 +55,12 @@ func main() {
 		BackgroundColour: application.NewRGB(27, 38, 54),
 		URL:              "/",
 	})
+	window1.SetTitle("这里是墨七的测试")
+
+	window2 := app.Window.NewWithOptions(application.WebviewWindowOptions{
+		Title: "Window 2",
+	})
+	window2.SetURL("/")
 
 	// Create a goroutine that emits an event containing the current time every second.
 	// The frontend can listen to this event and update the UI accordingly.
