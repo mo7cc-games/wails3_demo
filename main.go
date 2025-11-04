@@ -47,20 +47,29 @@ func main() {
 	// 'URL' is the URL that will be loaded into the webview.
 	window1 := app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title: "Window 1",
+		// Frameless:        true,                            // ✅ 无边框
+		BackgroundColour: application.NewRGBA(0, 0, 0, 0), // ✅ 透明背景
+		BackgroundType:   application.BackgroundTypeTranslucent,
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
-		BackgroundColour: application.NewRGB(27, 38, 54),
-		URL:              "/",
+		URL: "/",
 	})
 	window1.SetTitle("这里是墨七的测试")
 
-	window2 := app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title: "Window 2",
-	})
-	window2.SetURL("/")
+	// window2 := app.Window.NewWithOptions(application.WebviewWindowOptions{
+	// 	Title:            "Window 2",
+	// 	Frameless:        true,                            // ✅ 无边框
+	// 	BackgroundColour: application.NewRGBA(0, 0, 0, 0), // ✅ 透明背景
+	// 	Mac: application.MacWindow{
+	// 		InvisibleTitleBarHeight: 50,
+	// 		Backdrop:                application.MacBackdropTranslucent,
+	// 		TitleBar:                application.MacTitleBarHiddenInset,
+	// 	},
+	// })
+	// window2.SetURL("/")
 
 	// Create a goroutine that emits an event containing the current time every second.
 	// The frontend can listen to this event and update the UI accordingly.
