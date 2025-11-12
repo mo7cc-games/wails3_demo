@@ -7,6 +7,7 @@
 }
 .wails-drag {
   --wails-draggable: drag; // wails 可拖动区域
+  cursor: move;
   @extend .no-select;
 }
 .wails-no-drag {

@@ -19,8 +19,8 @@ func (e WailsEventType) Time() {
 }
 
 // 专门用于事件通信，会执行前端的  Events.On('Action')
-func (e WailsEventType) Action(name string) {
-	WailsApp.Event.Emit("Action", name)
+func (e WailsEventType) Action(WindowName string, ActionName string) {
+	WailsApp.Event.Emit("Action", WindowName, ActionName)
 }
 
 // 窗口变化事件

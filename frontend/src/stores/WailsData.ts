@@ -9,6 +9,7 @@ type WailsDataState = {
   TimeStr: string;
   WindowName: string;
   IsWebGPU: boolean;
+  IsFrameless: boolean;
   ScreenInfo: WindowChangeOpt;
 };
 
@@ -18,8 +19,23 @@ export const useWailsDataStore = defineStore('WailsData', {
       WindowName: '',
       IsWebGPU: false,
       TimeStr: '',
+      IsFrameless: false,
       ScreenInfo: {} as WindowChangeOpt,
     };
+  },
+  actions: {
+    SetFrameless() {
+      const _this = this;
+      wailsio.Window.SetFrameless(true).then(() => {
+        _this.IsFrameless = true;
+      });
+    },
+    OutFrameless() {
+      const _this = this;
+      wailsio.Window.SetFrameless(false).then(() => {
+        _this.IsFrameless = false;
+      });
+    },
   },
 });
 
@@ -59,9 +75,7 @@ const _GetScreenInfo = async () => {
   const Pos = await wailsio.Window.Position();
   ScreenInfo.ScreenLeft = Pos.x;
   ScreenInfo.ScreenTop = Pos.y;
-
   ScreenInfo.IsFocused = await wailsio.Window.IsFocused();
-
   const wailsScreen = await wailsio.Window.GetScreen();
   ScreenInfo.Width = wailsScreen.Size.Width;
   ScreenInfo.Height = wailsScreen.Size.Height;
@@ -80,24 +94,32 @@ type WindowChangeType = {
   Action: string;
   WindowName: string;
 };
-// 全局只会执行一次的函数
 export const StartWailsDataListener = async () => {
+  // 等待资源全部加载完毕 再去干一些事情
   const WailsDataStore = useWailsDataStore();
-  // 当前所在窗口的名字，由 Wails 声明
+
   wailsio.Window.Name().then((name) => {
     WailsDataStore.WindowName = name;
     if (window.navigator.gpu) {
       WailsDataStore.IsWebGPU = true;
     }
     GetScreenInfo();
+    WailsService.GetWindowInfo(name).then((info) => {
+      if (info.EnableFrameless) {
+        WailsDataStore.SetFrameless();
+      } else {
+        WailsDataStore.OutFrameless();
+      }
+    });
   });
 
   // 专门用于 Pinia 的 Action 通信，可以直接使得多窗口的数据保持一致性
   // 用法 WailsService.Action('counterOptions.add');
   wailsio.Events.On('Action', (val) => {
     if (val.data) {
-      const name = val.data as string;
-      if (name === 'counterOptions.add') {
+      // const windowName = val.data[0] as string;
+      const actionName = val.data[1] as string;
+      if (actionName === 'counterOptions.add') {
         const store = useCounterOptionsStore();
         store.add();
       }

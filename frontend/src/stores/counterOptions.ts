@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { WailsService } from '@server/app';
+import { useWailsDataStore } from './WailsData';
 
 export const useCounterOptionsStore = defineStore('counterOptions', {
   // 状态：存储数据
@@ -20,8 +21,10 @@ export const useCounterOptionsStore = defineStore('counterOptions', {
   // Actions ：类似 methods，用于修改状态（支持同步和异步）
   actions: {
     increment() {
-      // 专门用于事件通信 会 触发 go 端的 Events.On('Action',()=>{})
-      WailsService.Action('counterOptions.add');
+      const WailsDataStore = useWailsDataStore();
+      if (WailsDataStore.WindowName) {
+        WailsService.Action(WailsDataStore.WindowName, 'counterOptions.add');
+      }
     },
     add() {
       this.count++; // 使用 `this` 访问和修改状态

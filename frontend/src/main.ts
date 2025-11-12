@@ -13,5 +13,7 @@ app.use(createPinia());
 app.use(router);
 app.mount('#vue-app');
 
-// 开始监听来自 Wails 的消息
-StartWailsDataListener();
+// 所有资源全部加载完毕之后再开始进行一些骚操作
+window.onload = () => {
+  StartWailsDataListener();
+};

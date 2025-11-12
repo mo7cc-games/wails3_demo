@@ -1,8 +1,8 @@
 {
-  "name": "lone-star-engineer",
+  "name": "wails3-demo",
   "private": true,
-  "version": "0.0.1",
-  "description": "《孤星工程师》",
+  "version": "0.1.2",
+  "description": "wails3 示例项目",
   "author": "墨七",
   "type": "module",
   "engine-strict": true,

@@ -22,8 +22,19 @@ func (s *WailsService) Add(n1 float64, n2 float64) string {
 }
 
 // 专门用于 Pinia 的 Action 通信，被前端调用
-func (s *WailsService) Action(name string) {
-	global.WailsEvent.Action(name)
+func (s *WailsService) Action(WindowName string, ActionName string) {
+	global.WailsEvent.Action(WindowName, ActionName)
+}
+
+// 专门用于 Pinia 的 Action 通信，被前端调用
+func (s *WailsService) GetWindowInfo(WindowName string) global.WebviewWindow {
+	w := global.GetWebviewWindow(WindowName)
+	if w == nil {
+		// 未知窗口，这里应该打印警告
+		flog.AppLog.Warn("WailsService.GetWindowInfo", "未知窗口："+WindowName)
+		return global.WebviewWindow{}
+	}
+	return *w
 }
 
 func (s *WailsService) OpenTestWindow() {
@@ -33,14 +44,14 @@ func (s *WailsService) OpenTestWindow() {
 		return
 	}
 	global.WebWindow.Test.Window = global.WailsApp.Window.NewWithOptions(application.WebviewWindowOptions{
-		Name:             "Test",
-		Width:            800,
-		Height:           600,
-		Frameless:        false,
-		BackgroundColour: application.NewRGBA(0, 0, 0, 0),
-		BackgroundType:   application.BackgroundTypeTransparent,
-		URL:              "/#/test",
+		Name:           "Test",
+		Width:          800,
+		Height:         600,
+		BackgroundType: application.BackgroundTypeTransparent,
+		URL:            "/#/test",
 	})
+	global.WebWindow.Test.EnableFrameless = true // 启用无边框模式
+
 	// 启用监听
 	global.WebWindow.Test.ListenWindowEvent()
 }

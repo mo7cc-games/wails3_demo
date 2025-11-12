@@ -29,5 +29,5 @@
     "frontend/node_modules": true,
     ".task": true
   },
-  "cSpell.words": ["mstr", "pinia", "wailsio"]
+  "cSpell.words": ["Frameless", "mstr", "pinia", "wailsio"]
 }

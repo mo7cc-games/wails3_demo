@@ -23,10 +23,9 @@ WebGPU: {{ IsWebGPU }}</pre
       <button class="btn" v-if="ScreenInfo.IsFullscreen" @click="WindowControl('unfullscreen')">
         退出全屏
       </button>
-
-      <button class="btn" @click="WindowControl('setframeless')">设置为无边框</button>
-      <button class="btn" @click="WindowControl('unsetframeless')">退出无边框</button>
-      <button class="btn" @click="WindowControl('close')">关闭</button>
+      <button class="btn" v-if="!IsFrameless" @click="SetFrameless">无边框</button>
+      <button class="btn" v-if="IsFrameless" @click="OutFrameless">退出无边框</button>
+      <button class="btn" @click="WindowControl('close')">关闭窗口</button>
     </div>
     <button class="btn" @click="isHide = !isHide">{{ isHide ? '显示菜单' : '隐藏菜单' }}</button>
   </div>
@@ -35,7 +34,7 @@ WebGPU: {{ IsWebGPU }}</pre
 <script lang="ts">
 import wailsio from '@src/utils/wailsio';
 import { useWailsDataStore } from '@src/stores/WailsData';
-import { mapState } from 'pinia';
+import { mapState, mapActions } from 'pinia';
 
 interface data {
   isHide: boolean;
@@ -49,11 +48,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(useWailsDataStore, ['WindowName', 'IsWebGPU', 'ScreenInfo']),
+    ...mapState(useWailsDataStore, ['IsFrameless', 'WindowName', 'IsWebGPU', 'ScreenInfo']),
   },
   async mounted() {},
   beforeUnmount() {},
   methods: {
+    ...mapActions(useWailsDataStore, ['SetFrameless', 'OutFrameless']),
     async WindowControl(type: string) {
       if (type === 'mini') {
         await wailsio.Window.Minimise();
@@ -75,12 +75,6 @@ export default {
       }
       if (type === 'unfullscreen') {
         await wailsio.Window.UnFullscreen();
-      }
-      if (type === 'setframeless') {
-        await wailsio.Window.SetFrameless(true);
-      }
-      if (type === 'unsetframeless') {
-        await wailsio.Window.SetFrameless(false);
       }
     },
   },

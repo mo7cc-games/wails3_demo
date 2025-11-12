@@ -29,13 +29,14 @@ var WebWindow WebWindowType
 
 // 定义窗口结构体
 type WebviewWindow struct {
-	Window       *application.WebviewWindow
-	Name         string  // 窗口名称
-	IsListen     bool    // 是否已启用监听事件
-	IsRunner     bool    // 是否正在运行
-	IsFullscreen bool    // 是否全屏
-	NowDpr       float32 // 当前窗口的 DPR 值
-	OrgDpr       float32 // 原始 DPR 值
+	Window          *application.WebviewWindow
+	Name            string  // 窗口名称
+	IsListen        bool    // 是否已启用监听事件
+	IsRunner        bool    // 是否正在运行
+	IsFullscreen    bool    // 是否全屏
+	NowDpr          float32 // 当前窗口的 DPR 值
+	OrgDpr          float32 // 原始 DPR 值
+	EnableFrameless bool    // 启用无边框模式
 }
 
 func (s *WebviewWindow) ListenWindowEvent() {
@@ -55,21 +56,26 @@ func (s *WebviewWindow) ListenWindowEvent() {
 	s.Window.OnWindowEvent(events.Common.WindowRuntimeReady, func(e *application.WindowEvent) {
 		s.IsRunner = true
 		flog.AppLog.Debug("global.ListenWindowEvent", s.Name, "窗口运行时准备就绪")
-		// 运行时准备就绪之后，设置为无边框模式，可以解决部分区域无法点击的问题。
-		s.Window.SetFrameless(true)
+	})
+
+	// 窗口显示
+	s.Window.OnWindowEvent(events.Common.WindowShow, func(e *application.WindowEvent) {
+		WailsEvent.WindowChange(WindowChangeParam{
+			WindowName: s.Name,
+			Action:     "WindowShow",
+		})
 	})
 
 	// 窗口进入全屏
 	s.Window.OnWindowEvent(events.Common.WindowFullscreen, func(e *application.WindowEvent) {
-		s.IsFullscreen = true
 		WailsEvent.WindowChange(WindowChangeParam{
 			WindowName: s.Name,
 			Action:     "WindowFullscreen",
 		})
 	})
+
 	// 窗口退出全屏
 	s.Window.OnWindowEvent(events.Common.WindowUnFullscreen, func(e *application.WindowEvent) {
-		s.IsFullscreen = false
 		WailsEvent.WindowChange(WindowChangeParam{
 			WindowName: s.Name,
 			Action:     "WindowUnFullscreen",
@@ -104,13 +110,6 @@ func (s *WebviewWindow) ListenWindowEvent() {
 		WailsEvent.WindowChange(WindowChangeParam{
 			WindowName: s.Name,
 			Action:     "WindowHide",
-		})
-	})
-	// 窗口显示
-	s.Window.OnWindowEvent(events.Common.WindowShow, func(e *application.WindowEvent) {
-		WailsEvent.WindowChange(WindowChangeParam{
-			WindowName: s.Name,
-			Action:     "WindowShow",
 		})
 	})
 
