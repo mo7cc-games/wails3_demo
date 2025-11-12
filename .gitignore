@@ -1,0 +1,24 @@
+# Wails3
+.task
+bin
+build/linux/appimage/build
+build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+*.syso
+frontend/bindings
+
+# common ignores
+logs
+*.log
+.cache
+.DS_Store
+dist
+node_modules
+
+
+
+# lockfile
+package-lock.json
+go.sum
+
+# cache files
+.eslintcache

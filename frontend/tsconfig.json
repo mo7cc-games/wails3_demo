@@ -1,0 +1,18 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "ESNext",
+    "allowJs": true,
+    "moduleResolution": "Bundler",
+    "strict": false
+  }
+}

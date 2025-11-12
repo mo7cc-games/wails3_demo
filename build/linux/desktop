@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=My Product
+Comment=My Product Description
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/mo7app.exe %u
+Terminal=false
+Type=Application
+Icon=mo7app.exe
+Categories=Utility;
+StartupWMClass=mo7app.exe
+
+ 

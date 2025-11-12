@@ -1,0 +1,14 @@
+.no-select {
+  user-select: none; // 禁止文本被选中
+}
+
+.allow-select {
+  user-select: text; // 恢复文本可选中
+}
+.wails-drag {
+  --wails-draggable: drag; // wails 可拖动区域
+  @extend .no-select;
+}
+.wails-no-drag {
+  --wails-draggable: no-drag; // wails 禁止拖动区域
+}
