@@ -1,11 +1,11 @@
 package global
 
 /*
-这里的方法是传递数据给前端的。所以它会 go 被全局到处调用
-
+  这里的方法是传递数据给前端的。所以它被全局到处调用
 */
 
 import (
+	"app.local/app/types"
 	"github.com/m-startgo/go-utils/mtime"
 )
 
@@ -19,16 +19,14 @@ func (e WailsEventType) Time() {
 }
 
 // 专门用于事件通信，会执行前端的  Events.On('Action')
-func (e WailsEventType) Action(WindowName string, ActionName string) {
-	WailsApp.Event.Emit("Action", WindowName, ActionName)
+func (e WailsEventType) Action(opt types.ActionOpt) {
+	WailsApp.Event.Emit("Action", opt)
 }
 
-// 窗口变化事件
-type WindowChangeParam struct {
-	WindowName string
-	Action     string
+func (e WailsEventType) WindowChange(opt types.ActionOpt) {
+	WailsApp.Event.Emit("WindowChange", opt)
 }
 
-func (e WailsEventType) WindowChange(param WindowChangeParam) {
-	WailsApp.Event.Emit("WindowChange", param)
+func (e WailsEventType) BallWindowZoom(opt BallWindowType) {
+	WailsApp.Event.Emit("BallWindowZoom", opt)
 }

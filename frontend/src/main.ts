@@ -1,4 +1,6 @@
 import 'normalize.css';
+import 'simplebar-vue/dist/simplebar.min.css';
+
 import '@src/assets/main.scss';
 
 import { createApp } from 'vue';

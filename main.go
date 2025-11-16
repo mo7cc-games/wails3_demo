@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"log/slog"
-	"time"
 
 	"app.local/app"
 	"app.local/app/global"
@@ -18,12 +17,12 @@ var FrontendDist embed.FS
 //go:embed build/appicon.png
 var IconFS embed.FS
 
-func GetIcon() []byte {
+func getIcon() []byte {
 	data, _ := IconFS.ReadFile("build/appicon.png")
 	return data
 }
 
-func StartWailsApp() {
+func startWailsApp() {
 	global.WailsApp = application.New(application.Options{
 		Name:        "LoneStarEngineer",
 		Description: "《孤星工程师》",
@@ -39,62 +38,32 @@ func StartWailsApp() {
 		LogLevel: slog.LevelWarn,
 	})
 
-	// 创建右键菜单
-	global.WebWindow.Main.Window = global.WailsApp.Window.NewWithOptions(application.WebviewWindowOptions{
-		Name:           "Main",
-		Width:          800,
-		Height:         600,
-		BackgroundType: application.BackgroundTypeTransparent,
-		URL:            "/",
-	})
-	global.WebWindow.Main.EnableFrameless = true // 启用无边框模式
-
-	global.WebWindow.Main.ListenWindowEvent()
-
-	flog.AppLog.Info("main|StartWailsApp", "启动Wails应用")
-
-	go func() {
-		for {
-			global.WailsEvent.Time()
-			time.Sleep(time.Second)
-		}
-	}()
-}
-
-func SetTrayMenu() {
-	iconBytes := GetIcon()
-
-	trayMenu := application.NewMenu()
-
-	trayMenu.Add("还原窗口").OnClick(func(ctx *application.Context) {
-		global.WebWindow.Main.Window.Show()
-		global.WebWindow.Main.Window.Restore()
-	})
-	trayMenu.AddSeparator()
-	trayMenu.Add("最小化到托盘区").OnClick(func(ctx *application.Context) {
-		global.WebWindow.Main.Window.Hide()
-	})
-	trayMenu.AddSeparator()
-	trayMenu.Add("退出").OnClick(func(ctx *application.Context) {
-		global.WailsApp.Quit()
-	})
-
-	tray := global.WailsApp.SystemTray.New()
-	tray.SetIcon(iconBytes)
-	tray.SetMenu(trayMenu)
-	flog.AppLog.Info("main|SetTrayMenu", "设置托盘区")
+	go flog.AppLog.Info("main.startWailsApp", "启动Wails应用")
 }
 
 func main() {
 	global.SysInit() // 初始化全局系统
 
-	StartWailsApp()
+	startWailsApp() // 启动 Wails 应用
 
-	go SetTrayMenu()
+	// 配置上下文菜单
+	global.SetContextMenu()
+
+	// 配置托盘区菜单
+	global.SetTrayMenu(
+		global.SetTrayMenuOpt{
+			Icon: getIcon(),
+		},
+	)
+
+	global.OpenMainWindow() // 打开主窗口
+
+	// 运行前的准备工作
+	global.BeforeRun()
 
 	// 运行 Wails 应用，并阻塞进程
 	err := global.WailsApp.Run()
 	if err != nil {
-		flog.AppLog.Error("main|WailsApp.Run", err)
+		go flog.AppLog.Error("main|WailsApp.Run", err)
 	}
 }

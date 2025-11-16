@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { WailsService } from '@server/app';
+import { WailsServe } from '@src/utils/wails';
 import { useWailsDataStore } from './WailsData';
 
 export const useCounterOptionsStore = defineStore('counterOptions', {
@@ -22,8 +22,12 @@ export const useCounterOptionsStore = defineStore('counterOptions', {
   actions: {
     increment() {
       const WailsDataStore = useWailsDataStore();
+
       if (WailsDataStore.WindowName) {
-        WailsService.Action(WailsDataStore.WindowName, 'counterOptions.add');
+        WailsServe.Action({
+          ActionName: 'counterOptions.add',
+          WindowName: WailsDataStore.WindowName,
+        });
       }
     },
     add() {

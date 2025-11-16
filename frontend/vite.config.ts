@@ -34,7 +34,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@src': path.resolve(__dirname, './src'),
-      '@server': path.resolve(__dirname, './bindings/app.local'),
     },
   },
   server: {
