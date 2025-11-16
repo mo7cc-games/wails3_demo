@@ -21,7 +21,6 @@
 # 安装 npm 全局工具
 npm install -g ts-node del-cli
 
-
 # 安装项目依赖并更新到最新版本
 npm run re-update
 
@@ -38,8 +37,7 @@ go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-alpha.40
 go mod tidy
 
-
-# 启动开发模式
+# 启动开发模式 - 初次运行需要执行两边
 npm run app-dev
 
 # 打包
